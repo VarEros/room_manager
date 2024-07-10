@@ -42,7 +42,7 @@ class _MainAppState extends State<MainApp> {
       themeMode: ThemeMode.light,
       theme: _theme,
       debugShowCheckedModeBanner: false,
-      home: const Screen()
+      home: const LoginScreen()
     );
   }
 }

@@ -90,7 +90,12 @@ class _ScreenState extends State<Screen> {
           const VerticalDivider(thickness: 1, width: 1),
           Expanded(
             child: <Widget>[
-              selectedArea != null ? const CalendarScreen() : const Text('Seleccione un area', textAlign: TextAlign.center),
+              selectedArea != null ? const CalendarScreen() : Wrap(
+                alignment: WrapAlignment.center,
+                children: [
+                  FilledButton(onPressed: () => showAreaSelectDialog(), child: const Text('Seleccione un area')),
+                ],
+              ),
               AreaListScreen(),
             ][selectedIndex],
           ),
@@ -98,25 +103,11 @@ class _ScreenState extends State<Screen> {
       ),
       floatingActionButton: selectedIndex < 1 ? 
       // change area callendar
-      FloatingActionButton.extended(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AreaSelectDialog(idArea: selectedArea?.id);
-            }
-          ).then((value) {
-            if (value != null) {
-              setState(() {
-                selectedArea = value;
-              });
-            }
-          });
-        },
-        isExtended: selectedArea == null,
-        label: const Text('Cambiar Area'),
-        icon: const Icon(Icons.door_front_door)
-      )
+      selectedArea != null ? FloatingActionButton(
+        tooltip: 'Cambiar Area',
+        onPressed: () => showAreaSelectDialog(),
+        child: const Icon(Icons.door_front_door)
+      ) : null
       : 
       FloatingActionButton(
         onPressed: () {
@@ -126,7 +117,23 @@ class _ScreenState extends State<Screen> {
       )
     );
   }
+
+  void showAreaSelectDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AreaSelectDialog(idArea: selectedArea?.id);
+      }
+    ).then((value) {
+      if (value != null) {
+        setState(() {
+          selectedArea = value;
+        });
+      }
+    });
+  }
 }
+
 
 void handleClick(String value) {
     switch (value) {
