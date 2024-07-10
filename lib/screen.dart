@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:room_manager/Utils.dart';
+import 'package:room_manager/model/area.dart';
 import 'package:room_manager/screen/area_list_screen.dart';
 import 'package:room_manager/screen/calendar_screen.dart';
+import 'package:room_manager/screen/login_screen.dart';
+import 'package:room_manager/widget/area_select_dialog.dart';
 
 class Screen extends StatefulWidget {
   const Screen({ super.key });
@@ -10,34 +14,35 @@ class Screen extends StatefulWidget {
 }
 
 class _ScreenState extends State<Screen> {
-
-  int selectedIndex = 0;
+  int selectedIndex = 1;
+  Area ?selectedArea;
+  Utils utils = Utils();
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 10,
-        title: const Text('Room Manager'),
+        title: Text(utils.getAppbarTitle(selectedIndex, selectedArea?.name)),
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Theme.of(context).primaryColorLight,
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: PopupMenuButton<String>(
-              onSelected: handleClick,
-              position: PopupMenuPosition.under,
-              icon: const Icon(Icons.account_circle),
-              itemBuilder: (BuildContext context) {
-                return {'Info', 'Cerrar Sesión'}.map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
-              },
+            child:  GestureDetector(
+              onTap: () {},
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  children: [
+                    Text('Usuario'),
+                    SizedBox(width: 8),
+                    Icon(Icons.person),
+                  ],
+                ),
+              ),
             ),
-          ),
+          )
         ],
       ),
       body: Row(
@@ -68,17 +73,52 @@ class _ScreenState extends State<Screen> {
             selectedIndex: selectedIndex,
             labelType: NavigationRailLabelType.all,
             elevation: 5,
+            trailing: Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: IconButton(
+                    icon: const Icon(Icons.logout), 
+                    tooltip: 'Cerrar Sesión',
+                    onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen()))
+                  ),
+                ),
+              ),
+            ),
           ),
           const VerticalDivider(thickness: 1, width: 1),
           Expanded(
             child: <Widget>[
-              const CalendarScreen(),
+              selectedArea != null ? const CalendarScreen() : const Text('Seleccione un area', textAlign: TextAlign.center),
               AreaListScreen(),
             ][selectedIndex],
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: selectedIndex < 1 ? 
+      // change area callendar
+      FloatingActionButton.extended(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AreaSelectDialog(idArea: selectedArea?.id);
+            }
+          ).then((value) {
+            if (value != null) {
+              setState(() {
+                selectedArea = value;
+              });
+            }
+          });
+        },
+        isExtended: selectedArea == null,
+        label: const Text('Cambiar Area'),
+        icon: const Icon(Icons.door_front_door)
+      )
+      : 
+      FloatingActionButton(
         onPressed: () {
           // Add your onPressed code here!
         },
