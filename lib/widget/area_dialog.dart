@@ -3,7 +3,7 @@ import 'package:room_manager/model/area.dart';
 
 class AreaDialog extends StatelessWidget {
   final Area area;
-const AreaDialog({ super.key, required this.area});
+  const AreaDialog({ super.key, required this.area});
 
   @override
   Widget build(BuildContext context){
@@ -12,7 +12,7 @@ const AreaDialog({ super.key, required this.area});
 
     return AlertDialog(
       elevation: 10,
-      title: const Text('Editar Area'),
+      title: Text(area.id == 0 ? 'Agregar Area' : 'Editar Area'),
       content: SizedBox(
         width: dialogWidth,
         child: Form(

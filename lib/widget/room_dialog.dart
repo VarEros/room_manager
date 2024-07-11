@@ -20,7 +20,7 @@ class _RoomDialogState extends State<RoomDialog> {
 
     return AlertDialog(
       elevation: 10,
-      title: const Text('Edit Sala'),
+      title: Text(widget.room.id == 0 ? 'Agregar Sala' : 'Editar Sala'),
       content: SizedBox(
         width: dialogWidth,
         child: Form(

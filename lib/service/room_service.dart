@@ -7,6 +7,8 @@ class RoomService {
     Room(id: 3, name: 'Room 3', description: 'Room 3 description', capacity: 10, idArea: 3),
   ];
 
+  emptyRoom() => Room(id: 0, name: '', description: '', capacity: 0, idArea: 1);
+
   //save room
   Future<void> saveRoom(Room room) async {
     return Future.delayed(const Duration(seconds: 2));

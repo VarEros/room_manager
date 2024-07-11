@@ -7,6 +7,8 @@ class AreaService {
     Area(id: 3, name: 'Area 3', description: 'Area 3 description'),
   ];
 
+  emptyArea() => Area(id: 0, name: '', description: '');
+
   //save area
   Future<void> saveArea(Area area) async {
     return Future.delayed(const Duration(seconds: 2));

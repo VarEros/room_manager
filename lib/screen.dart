@@ -5,7 +5,11 @@ import 'package:room_manager/screen/area_list_screen.dart';
 import 'package:room_manager/screen/calendar_screen.dart';
 import 'package:room_manager/screen/login_screen.dart';
 import 'package:room_manager/screen/room_list_screen.dart';
+import 'package:room_manager/service/area_service.dart';
+import 'package:room_manager/service/room_service.dart';
+import 'package:room_manager/widget/area_dialog.dart';
 import 'package:room_manager/widget/area_select_dialog.dart';
+import 'package:room_manager/widget/room_dialog.dart';
 
 class Screen extends StatefulWidget {
   const Screen({ super.key });
@@ -120,14 +124,24 @@ class _ScreenState extends State<Screen> {
         1 => FloatingActionButton(
           tooltip: 'Agregar Area',
           onPressed: () {
-            // Add your onPressed code here!
+            showDialog(
+              context: context, 
+              builder: (BuildContext context) {
+                return AreaDialog(area: AreaService().emptyArea());
+              }
+            );
           },
           child: const Icon(Icons.add),
         ),
         2 => FloatingActionButton(
           tooltip: 'Agregar Sala',
           onPressed: () {
-            // Add your onPressed code here!
+            showDialog(
+              context: context, 
+              builder: (BuildContext context) {
+                return RoomDialog(room: RoomService().emptyRoom());
+              }
+            );
           },
           child: const Icon(Icons.add),
         ),
