@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:room_manager/model/area.dart';
+import 'package:room_manager/service/area_service.dart';
 
 class AreaSelectDialog extends StatefulWidget {
   final int? idArea;
@@ -11,19 +12,13 @@ class AreaSelectDialog extends StatefulWidget {
 
 class _AreaSelectDialogState extends State<AreaSelectDialog> {
   
-  List<Area> areas = [
-    Area(id: 1, name: 'Area 1', description: 'Area 1 Description'),
-    Area(id: 2, name: 'Area 2', description: 'Area 2 Description'),
-    Area(id: 3, name: 'Area 3', description: 'Area 3 Description'),
-    Area(id: 4, name: 'Area 4', description: 'Area 4 Description'),
-    Area(id: 5, name: 'Area 5', description: 'Area 5 Description'),
-  ];
-
+  List<Area> areas = AreaService().areas;
   late Area selectedArea;
   
   @override
   void initState() {
     super.initState();
+
     selectedArea = areas.firstWhere((element) => element.id == widget.idArea, orElse: () => areas[0]);
   }
 

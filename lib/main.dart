@@ -40,9 +40,12 @@ class _MainAppState extends State<MainApp> {
       ],
       locale: const Locale('es'),
       themeMode: ThemeMode.light,
+      darkTheme: _theme.copyWith(
+        brightness: Brightness.dark,
+      ),
       theme: _theme,
       debugShowCheckedModeBanner: false,
-      home: const LoginScreen()
+      home: const Screen()
     );
   }
 }

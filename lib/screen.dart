@@ -4,6 +4,7 @@ import 'package:room_manager/model/area.dart';
 import 'package:room_manager/screen/area_list_screen.dart';
 import 'package:room_manager/screen/calendar_screen.dart';
 import 'package:room_manager/screen/login_screen.dart';
+import 'package:room_manager/screen/room_list_screen.dart';
 import 'package:room_manager/widget/area_select_dialog.dart';
 
 class Screen extends StatefulWidget {
@@ -65,6 +66,10 @@ class _ScreenState extends State<Screen> {
                 label: Text('Areas'),
               ),
               NavigationRailDestination(
+                icon: Icon(Icons.room_service), 
+                label: Text('Salas')
+              ),
+              NavigationRailDestination(
                 icon: Icon(Icons.settings),
                 selectedIcon: Icon(Icons.settings),
                 label: Text('Ajustes'),
@@ -90,31 +95,44 @@ class _ScreenState extends State<Screen> {
           const VerticalDivider(thickness: 1, width: 1),
           Expanded(
             child: <Widget>[
-              selectedArea != null ? const CalendarScreen() : Wrap(
-                alignment: WrapAlignment.center,
-                children: [
-                  FilledButton(onPressed: () => showAreaSelectDialog(), child: const Text('Seleccione un area')),
-                ],
-              ),
-              AreaListScreen(),
+              if (selectedArea != null) 
+                const CalendarScreen() 
+              else 
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  children: [
+                    FilledButton(onPressed: () => showAreaSelectDialog(), child: const Text('Seleccione un area')),
+                  ],
+                ),
+              const AreaListScreen(),
+              const RoomListScreen()
             ][selectedIndex],
           ),
         ],
       ),
-      floatingActionButton: selectedIndex < 1 ? 
-      // change area callendar
-      selectedArea != null ? FloatingActionButton(
-        tooltip: 'Cambiar Area',
-        onPressed: () => showAreaSelectDialog(),
-        child: const Icon(Icons.door_front_door)
-      ) : null
-      : 
-      FloatingActionButton(
-        onPressed: () {
-          // Add your onPressed code here!
-        },
-        child: const Icon(Icons.add),
-      )
+      floatingActionButton: 
+      switch (selectedIndex) {
+        0 =>  selectedArea != null ? FloatingActionButton(
+          tooltip: 'Cambiar Area',
+          onPressed: () => showAreaSelectDialog(),
+          child: const Icon(Icons.door_front_door)
+        ) : null,
+        1 => FloatingActionButton(
+          tooltip: 'Agregar Area',
+          onPressed: () {
+            // Add your onPressed code here!
+          },
+          child: const Icon(Icons.add),
+        ),
+        2 => FloatingActionButton(
+          tooltip: 'Agregar Sala',
+          onPressed: () {
+            // Add your onPressed code here!
+          },
+          child: const Icon(Icons.add),
+        ),
+        _ => null,
+      }
     );
   }
 
@@ -133,15 +151,3 @@ class _ScreenState extends State<Screen> {
     });
   }
 }
-
-
-void handleClick(String value) {
-    switch (value) {
-      case 'Info':
-
-        break;
-      case 'Cerrar Sesión':
-        break;
-    }
-}
-
