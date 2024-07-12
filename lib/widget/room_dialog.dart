@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:room_manager/model/area.dart';
 import 'package:room_manager/model/room.dart';
 import 'package:room_manager/service/area_service.dart';
@@ -12,11 +13,15 @@ class RoomDialog extends StatefulWidget {
 }
 
 class _RoomDialogState extends State<RoomDialog> {
+  
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final List<Area> areas = AreaService().areas;
+
+
   @override
   Widget build(BuildContext context){
+    
     final double dialogWidth = MediaQuery.of(context).size.width * 0.8;
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    final List<Area> areas = AreaService().areas;
 
     return AlertDialog(
       elevation: 10,
@@ -31,8 +36,9 @@ class _RoomDialogState extends State<RoomDialog> {
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Nombre'),
                 initialValue: widget.room.name,
-                onChanged: (value) => widget.room.name = value,
+                onChanged: (value) => setState(() => widget.room.name = value),
                 validator: (value) => value!.isEmpty ? 'Porfavor, introduzca un nombre' : null,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
               const SizedBox(height: 10),
               TextFormField(
@@ -41,8 +47,20 @@ class _RoomDialogState extends State<RoomDialog> {
                 maxLines: 5,
                 decoration: const InputDecoration(labelText: 'Descripción'),
                 initialValue: widget.room.description,
-                onChanged: (value) => widget.room.description = value,
+                onChanged: (value) => setState (() => widget.room.description = value),
                 validator: (value) => value!.isEmpty ? 'Por favor, introduzca una descripción' : null,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                textAlignVertical: TextAlignVertical.bottom,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                decoration: const InputDecoration(labelText: 'Capacidad'),
+                initialValue: widget.room.capacity.toString(),
+                onChanged: (value) => setState(() => widget.room.capacity = int.tryParse(value) ?? 0),
+                validator: (value) => value!.isEmpty ? 'Por favor, introduzca la capacidad de la sala' : null,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
               const SizedBox(height: 10),
               DropdownButton<int>(
@@ -68,11 +86,7 @@ class _RoomDialogState extends State<RoomDialog> {
           child: const Text('Cancelar'),
         ),
         FilledButton(
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              Navigator.of(context).pop(widget.room);
-            } 
-          },
+          onPressed: formKey.currentState != null && formKey.currentState!.validate() ? () => Navigator.of(context).pop(widget.room)  : null ,
           child: const Text('Guardar'),
         ),
       ],

@@ -3,7 +3,7 @@ import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
 
 class Utils extends ChangeNotifier {
-  static const pages = ['Calendario', 'Areas', 'Ajustes'];
+  static const pages = ['Calendario', 'Areas', 'Salas', 'Ajustes'];
 
   String getAppbarTitle(int pageIndex, String? areaName) {
     if (pageIndex == 0 && areaName != null) return 'Calendario de $areaName';
