@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:room_manager/model/room.dart';
 import 'package:room_manager/service/room_service.dart';
 import 'package:room_manager/widget/room_elem_widget.dart';
 

@@ -15,7 +15,16 @@ class RoomDialog extends StatefulWidget {
 class _RoomDialogState extends State<RoomDialog> {
   
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final List<Area> areas = AreaService().areas;
+  AreaService areaService = AreaService();
+  late final bool isNew;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    isNew = widget.room.id == 0;
+    areaService.getAreas().then((value) => setState(() => isLoading = false));
+    super.initState();
+  }
 
 
   @override
@@ -23,9 +32,10 @@ class _RoomDialogState extends State<RoomDialog> {
     
     final double dialogWidth = MediaQuery.of(context).size.width * 0.8;
 
-    return AlertDialog(
+    return isLoading ? const Center(child: CircularProgressIndicator()) :
+    AlertDialog(
       elevation: 10,
-      title: Text(widget.room.id == 0 ? 'Agregar Sala' : 'Editar Sala'),
+      title: Text(isNew ? 'Agregar Sala' : 'Editar Sala'),
       content: SizedBox(
         width: dialogWidth,
         child: Form(
@@ -65,15 +75,15 @@ class _RoomDialogState extends State<RoomDialog> {
               const SizedBox(height: 10),
               DropdownButton<int>(
                 isExpanded: true,
-                value: widget.room.idArea,
-                items: areas.map((Area area) {
+                value: isNew ? 0 : widget.room.area!.id,
+                items: areaService.areas.map((Area area) {
                   return DropdownMenuItem<int>(
                     value: area.id,
                     child: Text(area.name),
                   );
                 }).toList(),
                 onChanged: (int? newValue) {
-                  setState(() => widget.room.idArea = newValue!);
+                  setState(() => widget.room.area!.id = newValue!);
                 },
               ),
             ],

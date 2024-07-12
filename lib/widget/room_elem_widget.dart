@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:room_manager/model/area.dart';
 import 'package:room_manager/model/room.dart';
-import 'package:room_manager/service/area_service.dart';
 import 'package:room_manager/utils.dart';
 import 'package:room_manager/widget/room_dialog.dart';
 
 class RoomElemWidget extends StatelessWidget {
-  final AreaService areaService;
   final Room room;
-  const RoomElemWidget({ super.key, required this.room, required this.areaService});
+  const RoomElemWidget({ super.key, required this.room});
 
   @override
   Widget build(BuildContext context){
     Utils utils = Utils();
-    final areas = AreaService().areas;
 
     return ListTile(
       // leading with circle room capacity
@@ -22,7 +18,7 @@ class RoomElemWidget extends StatelessWidget {
       ),
       title: Text(room.name),
       subtitle: Text(room.description),
-      trailing: Text(areas.firstWhere((element) => element.id == room.idArea).name),
+      trailing: Text(room.area!.name),
       onTap: () {
         showDialog(
           context: context, 
