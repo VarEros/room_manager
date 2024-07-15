@@ -129,7 +129,13 @@ class _ScreenState extends State<Screen> {
               builder: (BuildContext context) {
                 return AreaDialog(area: AreaService().emptyArea());
               }
-            );
+            ).then((value) {
+              if (value != null) {
+                AreaService().saveArea(value).then((_) {
+                  utils.showSuccessNotification(context, 'Create');
+                });
+              }
+            });
           },
           child: const Icon(Icons.add),
         ),
@@ -141,7 +147,13 @@ class _ScreenState extends State<Screen> {
               builder: (BuildContext context) {
                 return RoomDialog(room: RoomService().emptyRoom());
               }
-            );
+            ).then((value) {
+              if (value != null) {
+                RoomService().saveRoom(value).then((_) {
+                  utils.showSuccessNotification(context, 'Create');
+                });
+              }
+            });
           },
           child: const Icon(Icons.add),
         ),

@@ -75,7 +75,7 @@ class _RoomDialogState extends State<RoomDialog> {
               const SizedBox(height: 10),
               DropdownButton<int>(
                 isExpanded: true,
-                value: isNew ? 0 : widget.room.area!.id,
+                value: widget.room.area!.id,
                 items: areaService.areas.map((Area area) {
                   return DropdownMenuItem<int>(
                     value: area.id,

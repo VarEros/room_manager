@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:room_manager/model/area.dart';
+import 'package:room_manager/service/area_service.dart';
 import 'package:room_manager/utils.dart';
 import 'package:room_manager/widget/area_dialog.dart';
 
 class AreaElemWidget extends StatelessWidget {
   final Area area;
-  const AreaElemWidget({ super.key, required this.area});
+  final AreaService areaService;
+  const AreaElemWidget({ super.key, required this.area, required this.areaService});
 
   @override
   Widget build(BuildContext context){
@@ -20,7 +22,7 @@ class AreaElemWidget extends StatelessWidget {
           builder: (context) => AreaDialog(area: area)
         ).then((value) {
           if (value != null) {
-            utils.showSuccessNotification(context);
+            areaService.saveArea(area).then((value) => utils.showSuccessNotification(context, 'Update'));
           }
         });
       },

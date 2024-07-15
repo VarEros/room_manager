@@ -18,13 +18,8 @@ class AreaService {
   //save area
   Future<void> saveArea(Area area) async {
     return Future.delayed(const Duration(seconds: 2), () {
-      if (area.id == 0) {
-        area.id = areas.length + 1;
-        areas.add(area);
-      } else {
-        final index = areas.indexWhere((element) => element.id == area.id);
-        areas[index] = area;
-      }
+      areas.add(area);
     });
   }
+
 }

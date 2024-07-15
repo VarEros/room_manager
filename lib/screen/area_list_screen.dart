@@ -14,8 +14,10 @@ class _AreaListScreenState extends State<AreaListScreen> {
   bool isLoading = true;
 
   @override
-  void initState() {
-    areaService.getAreas().then((value) => setState(() => isLoading = false));
+  void initState() {    
+    areaService.getAreas().then((value) {
+      if (mounted) setState(() => isLoading = false);
+    });
     super.initState();
   }
 
@@ -24,7 +26,7 @@ class _AreaListScreenState extends State<AreaListScreen> {
 
     return isLoading ? 
       const Center(child: CircularProgressIndicator()) : ListView(
-      children: areaService.areas.map((area) => AreaElemWidget(area: area)).toList(),
+      children: areaService.areas.map((area) => AreaElemWidget(area: area, areaService: areaService)).toList(),
     );
   }
 }

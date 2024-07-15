@@ -25,7 +25,7 @@ class RoomElemWidget extends StatelessWidget {
           builder: (context) => RoomDialog(room: room)
         ).then((value) {
           if (value != null) {
-            utils.showSuccessNotification(context);
+            utils.showSuccessNotification(context, 'Update');
           }
         });
       },

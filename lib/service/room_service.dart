@@ -5,7 +5,7 @@ class RoomService {
   List<Room> rooms = [];
 
   Future <void> getRooms() async {
-    return Future.delayed(const Duration(seconds: 2), () {
+    return Future.delayed(const Duration(seconds: 2),   () {
       rooms = [    
         Room(id: 1, name: 'Room 1', description: 'Room 1 description', capacity: 10, area: Area(id: 1, name: 'Area 1', description: 'Area 1 description')),
         Room(id: 2, name: 'Room 2', description: 'Room 2 description', capacity: 10, area: Area(id: 2, name: 'Area 2', description: 'Area 2 description')),

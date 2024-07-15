@@ -15,7 +15,9 @@ class _RoomListScreenState extends State<RoomListScreen> {
 
   @override
   void initState() {
-    roomService.getRooms().then((value) => setState(() => isLoading = false));
+    roomService.getRooms().then((value) {
+      if (mounted) setState(() => isLoading = false);
+    });
     super.initState();
   }
 
