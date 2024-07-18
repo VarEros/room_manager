@@ -37,12 +37,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
       view: CalendarView.day,
       dataSource: AppointmentDataSource(eventService.appointments),
       onTap: (CalendarTapDetails details) {
-          if (details.targetElement == CalendarElement.calendarCell) {
-            _showAddEventDialog(details.date!);
-          } else if (details.targetElement == CalendarElement.appointment) {
-            _showRemoveEventDialog(details.appointments!.first);
-          }
-        },
+        if (details.targetElement == CalendarElement.calendarCell) {
+          _showAddEventDialog(details.date!);
+        } else if (details.targetElement == CalendarElement.appointment) {
+          _showRemoveEventDialog(details.appointments!.first);
+        }
+      },
       allowDragAndDrop: true,
       timeSlotViewSettings: const TimeSlotViewSettings(
         startHour: 9,
@@ -54,6 +54,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       ),
     );
   }
+
   void _showAddEventDialog(DateTime selectedDate) {
     showDialog(
       context: context,
@@ -80,6 +81,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     });
   }
 }
+
 
 class AppointmentDataSource extends CalendarDataSource {
   AppointmentDataSource(List<Appointment> source) {

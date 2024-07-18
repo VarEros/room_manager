@@ -25,6 +25,7 @@ class EventDialog extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
+                if (eventController.text.isEmpty) return;
                 final String eventTitle = eventController.text;
                 if (eventTitle.isNotEmpty) {
                   newAppointment = Appointment(

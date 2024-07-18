@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:room_manager/model/area.dart';
 import 'package:room_manager/model/room.dart';
 import 'package:room_manager/service/area_service.dart';
@@ -85,6 +86,10 @@ class _RoomDialogState extends State<RoomDialog> {
                 onChanged: (int? newValue) {
                   setState(() => widget.room.area.id = newValue!);
                 },
+              ),
+              const SizedBox(height: 10),
+              const MaterialColorPicker(
+                runAlignment: WrapAlignment.start,
               ),
             ],
           ),
