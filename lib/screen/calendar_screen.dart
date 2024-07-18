@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:room_manager/model/event.dart';
+import 'package:room_manager/service/event_service.dart';
+import 'package:room_manager/utils.dart';
+import 'package:room_manager/widget/event_dialog.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -8,16 +12,19 @@ const CalendarScreen({ super.key });
   State<CalendarScreen> createState() => _CalendarScreenState();
 }
 
-class _CalendarScreenState extends State<CalendarScreen> {  
-  
-  List<Meeting> _getDataSource() {
-    final List<Meeting> meetings = <Meeting>[];
-    final DateTime today = DateTime.now();
-    final DateTime startTime = DateTime(today.year, today.month, today.day, 9, 0, 0);
-    final DateTime endTime = startTime.add(const Duration(hours: 2));
-    meetings.add(
-        Meeting('Conference', startTime, endTime, const Color(0xFF0F8644), false));
-    return meetings;
+class _CalendarScreenState extends State<CalendarScreen> {
+  EventService eventService = EventService();
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    eventService.getEvents().then((value) {
+      eventService.getAppointments();
+      setState(() {
+        isLoading = false;
+      });
+    });
+    super.initState();
   }
 
   @override
@@ -28,7 +35,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
       showNavigationArrow: true,
       showDatePickerButton: true,
       view: CalendarView.day,
-      dataSource: MeetingDataSource(_getDataSource()),
+      dataSource: AppointmentDataSource(eventService.appointments),
+      onTap: (CalendarTapDetails details) {
+          if (details.targetElement == CalendarElement.calendarCell) {
+            _showAddEventDialog(details.date!);
+          } else if (details.targetElement == CalendarElement.appointment) {
+            _showRemoveEventDialog(details.appointments!.first);
+          }
+        },
+      allowDragAndDrop: true,
       timeSlotViewSettings: const TimeSlotViewSettings(
         startHour: 9,
         endHour: 20,
@@ -39,45 +54,35 @@ class _CalendarScreenState extends State<CalendarScreen> {
       ),
     );
   }
+  void _showAddEventDialog(DateTime selectedDate) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return EventDialog(selectedDate: selectedDate);
+      },
+    ).then((value) {
+      if (value != null) {
+        setState(() => eventService.appointments.add(value));
+      }
+    });
+  }
+
+  void _showRemoveEventDialog(Appointment appointment) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Utils().showConfirmationDialog(context, 'Eliminar Evento', '¿Estás seguro de que quieres eliminar este evento?');
+      },
+    ).then((value) {
+      if (value) {
+        setState(() => eventService.appointments.remove(appointment));
+      }
+    });
+  }
 }
 
-class MeetingDataSource extends CalendarDataSource {
-  MeetingDataSource(List<Meeting> source){
+class AppointmentDataSource extends CalendarDataSource {
+  AppointmentDataSource(List<Appointment> source) {
     appointments = source;
   }
-
-  @override
-  DateTime getStartTime(int index) {
-    return appointments![index].from;
-  }
-
-  @override
-  DateTime getEndTime(int index) {
-    return appointments![index].to;
-  }
-
-  @override
-  String getSubject(int index) {
-    return appointments![index].eventName;
-  }
-
-  @override
-  Color getColor(int index) {
-    return appointments![index].background;
-  }
-
-  @override
-  bool isAllDay(int index) {
-    return appointments![index].isAllDay;
-  }
-}
-
-class Meeting {
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
-
-  String eventName;
-  DateTime from;
-  DateTime to;
-  Color background;
-  bool isAllDay;
 }

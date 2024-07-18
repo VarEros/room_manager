@@ -5,7 +5,7 @@ class Room {
   String name;
   String description;
   int capacity;
-  Area? area;
+  Area area;
 
   Room({
     required this.id, 

@@ -27,4 +27,23 @@ class Utils extends ChangeNotifier {
       width: size.width * 0.3,
     ).show(context);
   }
+
+  showConfirmationDialog(BuildContext context, String title, String content) {
+    return AlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: const Text('Cancelar'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+          child: const Text('Confirmar'),
+        ),
+      ],
+    );
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:room_manager/model/area.dart';
 import 'package:room_manager/model/room.dart';
+import 'package:room_manager/service/area_service.dart';
 
 class RoomService {
   List<Room> rooms = [];
@@ -14,7 +15,7 @@ class RoomService {
     });
   }
 
-  emptyRoom() => Room(id: 0, name: '', description: '', capacity: 0, area: null);
+  emptyRoom() => Room(id: 0, name: '', description: '', capacity: 0, area: AreaService().emptyArea());
 
   //save room
   Future<void> saveRoom(Room room) async {

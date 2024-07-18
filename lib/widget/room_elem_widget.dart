@@ -18,7 +18,7 @@ class RoomElemWidget extends StatelessWidget {
       ),
       title: Text(room.name),
       subtitle: Text(room.description),
-      trailing: Text(room.area!.name),
+      trailing: Text(room.area.name),
       onTap: () {
         showDialog(
           context: context, 

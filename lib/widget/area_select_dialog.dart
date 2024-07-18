@@ -11,20 +11,22 @@ class AreaSelectDialog extends StatefulWidget {
 }
 
 class _AreaSelectDialogState extends State<AreaSelectDialog> {
-  
-  List<Area> areas = AreaService().areas;
+  AreaService areaService = AreaService();
+  bool isLoading = true;
   late Area selectedArea;
   
   @override
   void initState() {
     super.initState();
-
-    selectedArea = areas.firstWhere((element) => element.id == widget.idArea, orElse: () => areas[0]);
+    areaService.getAreas().then((value) { 
+      setState(() => isLoading = false);
+      selectedArea = areaService.areas.firstWhere((element) => element.id == widget.idArea, orElse: () => areaService.areas[0]);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return isLoading ? const Center(child: CircularProgressIndicator()) : AlertDialog(
       title: const Text('Cambiar Area'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -33,7 +35,7 @@ class _AreaSelectDialogState extends State<AreaSelectDialog> {
           DropdownButton<Area>(
             isExpanded: true,
             value: selectedArea,
-            items: areas.map((Area area) {
+            items: areaService.areas.map((Area area) {
               return DropdownMenuItem<Area>(
                 value: area,
                 child: Text(area.name),
