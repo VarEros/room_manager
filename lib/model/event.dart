@@ -3,13 +3,13 @@ class Event {
   String title;
   DateTime startDate;
   DateTime finishDate;
-  int color;
+  int roomId;
 
   Event({
     required this.id,
     required this.title,
     required this.startDate,
     required this.finishDate,
-    required this.color
+    required this.roomId
   });
 }

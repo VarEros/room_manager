@@ -43,6 +43,7 @@ class _RoomDialogState extends State<RoomDialog> {
           key: formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Nombre'),
@@ -88,8 +89,10 @@ class _RoomDialogState extends State<RoomDialog> {
                 },
               ),
               const SizedBox(height: 10),
-              const MaterialColorPicker(
-                runAlignment: WrapAlignment.start,
+              MaterialColorPicker(
+                alignment: WrapAlignment.spaceEvenly,
+                onColorChange: (value) =>  widget.room.color = value.value,
+                selectedColor: Color(widget.room.color),
               ),
             ],
           ),

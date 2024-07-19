@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:room_manager/model/event.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -8,9 +7,9 @@ class EventService {
   List<Appointment> appointments = [];
 
   Future getEvents() async {
-    return Future.delayed(const Duration(seconds: 2), () {
+    return Future.delayed(const Duration(seconds: 1), () {
       events = [
-        Event(id: 1, title: 'Event 1', startDate: DateTime.now(), finishDate: DateTime.now().add(const Duration(hours: 2)), color: 0xff123456),
+        Event(id: 1, title: 'Event 1', startDate: DateTime.now(), finishDate: DateTime.now().add(const Duration(hours: 2)), roomId: 1),
       ];
     });
   }
@@ -20,7 +19,7 @@ class EventService {
       startTime: event.startDate,
       endTime: event.finishDate,
       subject: event.title,
-      color: Color(event.color),
+      color: Colors.green,
       isAllDay: false
     )).toList();
   }

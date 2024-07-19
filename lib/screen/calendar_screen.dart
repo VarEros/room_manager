@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:room_manager/model/event.dart';
+import 'package:room_manager/model/room.dart';
 import 'package:room_manager/service/event_service.dart';
 import 'package:room_manager/utils.dart';
 import 'package:room_manager/widget/event_dialog.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalendarScreen extends StatefulWidget {
-const CalendarScreen({ super.key });
+  final List<Room> rooms;
+  const CalendarScreen({ super.key, required this.rooms });
 
   @override
   State<CalendarScreen> createState() => _CalendarScreenState();
@@ -14,22 +15,21 @@ const CalendarScreen({ super.key });
 
 class _CalendarScreenState extends State<CalendarScreen> {
   EventService eventService = EventService();
-  bool isLoading = true;
+  bool isLoadingEvents = true;
+  bool isLoadingRooms = true;
 
   @override
   void initState() {
     eventService.getEvents().then((value) {
       eventService.getAppointments();
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) setState(() => isLoadingEvents = false);
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context){
-    return SfCalendar(
+    return isLoadingEvents ? const Center(child: CircularProgressIndicator()) : SfCalendar(
       allowedViews: const [CalendarView.day, CalendarView.workWeek, CalendarView.month, CalendarView.timelineWorkWeek, CalendarView.schedule],
       allowViewNavigation: true,
       showNavigationArrow: true,
@@ -59,7 +59,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return EventDialog(selectedDate: selectedDate);
+        return EventDialog(selectedDate: selectedDate, rooms: widget.rooms);
       },
     ).then((value) {
       if (value != null) {

@@ -5,6 +5,7 @@ class Room {
   String name;
   String description;
   int capacity;
+  int color;
   Area area;
 
   Room({
@@ -12,6 +13,7 @@ class Room {
     required this.name, 
     required this.description, 
     required this.capacity,
+    required this.color,
     required this.area
   });
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:room_manager/model/room.dart';
+import 'package:room_manager/service/room_service.dart';
 import 'package:room_manager/utils.dart';
 import 'package:room_manager/widget/room_dialog.dart';
 
@@ -12,8 +13,9 @@ class RoomElemWidget extends StatelessWidget {
     Utils utils = Utils();
 
     return ListTile(
-      // leading with circle room capacity
+      // leading with circle room capaci
       leading: CircleAvatar(
+        backgroundColor: Color(room.color),
         child: Text(room.capacity.toString()),
       ),
       title: Text(room.name),
@@ -25,7 +27,9 @@ class RoomElemWidget extends StatelessWidget {
           builder: (context) => RoomDialog(room: room)
         ).then((value) {
           if (value != null) {
-            utils.showSuccessNotification(context, 'Update');
+            RoomService().saveRoom(value).then((_) =>
+              utils.showSuccessNotification(context, 'Update')
+            );
           }
         });
       },

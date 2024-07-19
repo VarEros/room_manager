@@ -21,6 +21,7 @@ class Screen extends StatefulWidget {
 class _ScreenState extends State<Screen> {
   int selectedIndex = 1;
   Area ?selectedArea;
+  RoomService roomService = RoomService();
   Utils utils = Utils();
   
   @override
@@ -100,7 +101,7 @@ class _ScreenState extends State<Screen> {
           Expanded(
             child: <Widget>[
               if (selectedArea != null) 
-                const CalendarScreen() 
+                CalendarScreen(rooms: roomService.rooms)
               else 
                 Wrap(
                   alignment: WrapAlignment.center,
@@ -170,8 +171,12 @@ class _ScreenState extends State<Screen> {
       }
     ).then((value) {
       if (value != null) {
-        setState(() {
-          selectedArea = value;
+        roomService.getRoomsByArea(value.id).then((_) {
+          print(value.id);
+          setState(() {
+            selectedArea = value;
+            roomService.rooms = roomService.rooms;
+          });
         });
       }
     });
