@@ -19,7 +19,7 @@ class Screen extends StatefulWidget {
 }
 
 class _ScreenState extends State<Screen> {
-  int selectedIndex = 1;
+  int selectedIndex = 0;
   Area ?selectedArea;
   RoomService roomService = RoomService();
   Utils utils = Utils();
