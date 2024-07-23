@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:room_manager/model/area.dart';
 import 'package:room_manager/model/room.dart';
 import 'package:room_manager/service/area_service.dart';
-import 'package:room_manager/utils.dart';
 
 class RoomService {
   List<Room> rooms = [];

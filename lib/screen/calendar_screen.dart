@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:room_manager/model/room.dart';
 import 'package:room_manager/service/event_service.dart';
+import 'package:room_manager/service/room_service.dart';
 import 'package:room_manager/utils.dart';
 import 'package:room_manager/widget/event_dialog.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalendarScreen extends StatefulWidget {
-  final List<Room> rooms;
-  const CalendarScreen({ super.key, required this.rooms });
+  final int areaId;
+  const CalendarScreen({ super.key, required this.areaId });
 
   @override
   State<CalendarScreen> createState() => _CalendarScreenState();
@@ -15,21 +15,37 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenState extends State<CalendarScreen> {
   EventService eventService = EventService();
-  bool isLoadingEvents = true;
-  bool isLoadingRooms = true;
+  RoomService roomService = RoomService();
+  bool isLoading = true;
+
+  loadData() {
+    isLoading = true;
+    roomService.getRoomsByArea(widget.areaId).then((value) {
+      eventService.getEventsByAreaId(widget.areaId).then((value) {
+        eventService.getAppointments();
+        setState(() => isLoading = false);
+      });
+    });
+  }
 
   @override
   void initState() {
-    eventService.getEvents().then((value) {
-      eventService.getAppointments();
-      if (mounted) setState(() => isLoadingEvents = false);
-    });
+    loadData();
     super.initState();
   }
 
   @override
+  void didUpdateWidget(covariant CalendarScreen oldWidget) {
+    if (oldWidget.areaId != widget.areaId) {
+
+      loadData();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context){
-    return isLoadingEvents ? const Center(child: CircularProgressIndicator()) : SfCalendar(
+    return isLoading ? const Center(child: CircularProgressIndicator()) : SfCalendar(
       allowedViews: const [CalendarView.day, CalendarView.workWeek, CalendarView.month, CalendarView.timelineWorkWeek, CalendarView.schedule],
       allowViewNavigation: true,
       showNavigationArrow: true,
@@ -61,7 +77,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return EventDialog(selectedDate: selectedDate, rooms: widget.rooms);
+        return EventDialog(selectedDate: selectedDate, rooms: roomService.rooms);
       },
     ).then((value) {
       if (value != null) {
