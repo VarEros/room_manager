@@ -43,6 +43,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
           _showRemoveEventDialog(details.appointments!.first);
         }
       },
+      //allow resizing
+      allowAppointmentResize: true,
       allowDragAndDrop: true,
       timeSlotViewSettings: const TimeSlotViewSettings(
         startHour: 9,

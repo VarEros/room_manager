@@ -36,6 +36,7 @@ class _EventDialogState extends State<EventDialog> {
             controller: eventController,
             decoration: const InputDecoration(label: Text('Titulo')),
           ),
+          const SizedBox(height: 10),
           DropdownButton<int>(
             isExpanded: true,
             value: selectedRoom,
