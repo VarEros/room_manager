@@ -80,20 +80,20 @@ class _CalendarScreenState extends State<CalendarScreen> {
             appointmentDisplayMode: MonthAppointmentDisplayMode.appointment
           ),
         ),
-        Positioned(
-          bottom: 10,
-          left: 10,
-          child: ValueListenableBuilder<bool>(
-            valueListenable: isChangesNotifier,
-            builder: (context, value, child) {
-              return FloatingActionButton.extended(
-                onPressed: value ? _saveChanges : null,
+        ValueListenableBuilder<bool>(
+          valueListenable: isChangesNotifier,
+          builder: (context, isChanges, child) {
+            return isChanges ? Positioned(
+              bottom: 16,
+              left: 16,
+              child: FloatingActionButton.extended(
+                onPressed: _saveChanges,
                 label: const Text('Guardar Cambios'),
                 icon: const Icon(Icons.save),
-              );
-            },
-          ),
-        )
+              ),
+            ) : Container();
+          },
+        ),
       ],
     );
   }
