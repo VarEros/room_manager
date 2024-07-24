@@ -34,12 +34,18 @@ class EventService {
     });
   }
 
+  Future saveEvents() async {
+    return Future.delayed(const Duration(seconds: 1), () {
+      return true;
+    });
+  }
+
   getAppointments() {
     appointments = events.map((event) => Appointment(
       startTime: event.startDate,
       endTime: event.finishDate,
       subject: event.title,
-      color: Colors.green,
+      color: Color(event.room.color),
       isAllDay: false
     )).toList();
   }

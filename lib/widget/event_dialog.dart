@@ -54,7 +54,7 @@ class _EventDialogState extends State<EventDialog> {
             lowerBound: const Duration(minutes: 15),
             upperBound: const Duration(hours: 4),
             duration: _duration,
-            onChange: (val) => setState(() => _duration = val),
+            onChange: (val) => setState(() => _duration = val), 
           ),
         ],
       ),

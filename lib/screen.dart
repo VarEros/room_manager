@@ -65,8 +65,7 @@ class _ScreenState extends State<Screen> {
                 label: Text('Calendario'),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.door_front_door),
-                selectedIcon: Icon(Icons.door_front_door),
+                icon: Icon(Icons.meeting_room),
                 label: Text('Areas'),
               ),
               NavigationRailDestination(
@@ -75,7 +74,6 @@ class _ScreenState extends State<Screen> {
               ),
               NavigationRailDestination(
                 icon: Icon(Icons.settings),
-                selectedIcon: Icon(Icons.settings),
                 label: Text('Ajustes'),
               ),
             ],
@@ -116,10 +114,10 @@ class _ScreenState extends State<Screen> {
       ),
       floatingActionButton: 
       switch (selectedIndex) {
-        0 =>  selectedArea != null ? FloatingActionButton(
-          tooltip: 'Cambiar Area',
+        0 =>  selectedArea != null ? FloatingActionButton.extended(
           onPressed: () => showAreaSelectDialog(),
-          child: const Icon(Icons.door_front_door)
+          label: const Text('Cambiar Area'),
+          icon: const Icon(Icons.meeting_room),
         ) : null,
         1 => FloatingActionButton(
           tooltip: 'Agregar Area',

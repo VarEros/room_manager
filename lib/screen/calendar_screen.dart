@@ -17,6 +17,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   EventService eventService = EventService();
   RoomService roomService = RoomService();
   bool isLoading = true;
+  final ValueNotifier<bool> isChangesNotifier = ValueNotifier<bool>(false);
 
   loadData() {
     isLoading = true;
@@ -35,9 +36,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   @override
+  void dispose() {
+    isChangesNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
   void didUpdateWidget(covariant CalendarScreen oldWidget) {
     if (oldWidget.areaId != widget.areaId) {
-
       loadData();
     }
     super.didUpdateWidget(oldWidget);
@@ -45,32 +51,58 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context){
-    return isLoading ? const Center(child: CircularProgressIndicator()) : SfCalendar(
-      allowedViews: const [CalendarView.day, CalendarView.workWeek, CalendarView.month, CalendarView.timelineWorkWeek, CalendarView.schedule],
-      allowViewNavigation: true,
-      showNavigationArrow: true,
-      showDatePickerButton: true,
-      view: CalendarView.day,
-      dataSource: AppointmentDataSource(eventService.appointments),
-      onTap: (CalendarTapDetails details) {
-        if (details.targetElement == CalendarElement.calendarCell) {
-          _showAddEventDialog(details.date!);
-        } else if (details.targetElement == CalendarElement.appointment) {
-          _showRemoveEventDialog(details.appointments!.first);
-        }
-      },
-      //allow resizing
-      allowAppointmentResize: true,
-      allowDragAndDrop: true,
-      timeSlotViewSettings: const TimeSlotViewSettings(
-        startHour: 9,
-        endHour: 20,
-        nonWorkingDays: <int>[DateTime.sunday, DateTime.saturday]
-      ),
-      monthViewSettings: const MonthViewSettings(
-        appointmentDisplayMode: MonthAppointmentDisplayMode.appointment
-      ),
+    return isLoading ? const Center(child: CircularProgressIndicator()) : Stack(
+      children: [
+        SfCalendar(
+          allowedViews: const [CalendarView.day, CalendarView.workWeek, CalendarView.month, CalendarView.timelineWorkWeek, CalendarView.schedule],
+          allowViewNavigation: true,
+          showNavigationArrow: true,
+          showDatePickerButton: true,
+          view: CalendarView.day,
+          dataSource: AppointmentDataSource(eventService.appointments),
+          onTap: (CalendarTapDetails details) {
+            if (details.targetElement == CalendarElement.calendarCell) {
+              _showAddEventDialog(details.date!);
+            } else if (details.targetElement == CalendarElement.appointment) {
+              _showRemoveEventDialog(details.appointments!.first);
+            }
+          },
+          allowAppointmentResize: true,
+          allowDragAndDrop: true,
+          onDragEnd: (AppointmentDragEndDetails details) => isChangesNotifier.value = true,
+          onAppointmentResizeEnd: (appointmentResizeEndDetails) => isChangesNotifier.value = true,
+          timeSlotViewSettings: const TimeSlotViewSettings(
+            startHour: 9,
+            endHour: 20,
+            nonWorkingDays: <int>[DateTime.sunday, DateTime.saturday]
+          ),
+          monthViewSettings: const MonthViewSettings(
+            appointmentDisplayMode: MonthAppointmentDisplayMode.appointment
+          ),
+        ),
+        Positioned(
+          bottom: 10,
+          left: 10,
+          child: ValueListenableBuilder<bool>(
+            valueListenable: isChangesNotifier,
+            builder: (context, value, child) {
+              return FloatingActionButton.extended(
+                onPressed: value ? _saveChanges : null,
+                label: const Text('Guardar Cambios'),
+                icon: const Icon(Icons.save),
+              );
+            },
+          ),
+        )
+      ],
     );
+  }
+
+  void _saveChanges() {
+    eventService.saveEvents().then((value) {
+      Utils().showSuccessNotification(context, 'Update');
+      isChangesNotifier.value = false;
+    });
   }
 
   void _showAddEventDialog(DateTime selectedDate) {
@@ -81,7 +113,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
       },
     ).then((value) {
       if (value != null) {
-        setState(() => eventService.appointments.add(value));
+        setState(() { 
+          eventService.appointments.add(value);
+          isChangesNotifier.value = true;
+        });
       }
     });
   }
@@ -94,7 +129,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
       },
     ).then((value) {
       if (value) {
-        setState(() => eventService.appointments.remove(appointment));
+        setState(() {
+          eventService.appointments.remove(appointment);
+          isChangesNotifier.value = true;
+        });
       }
     });
   }
