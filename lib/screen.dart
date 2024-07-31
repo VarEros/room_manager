@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:room_manager/Utils.dart';
+// import 'package:room_manager/Utils.dart';
 import 'package:room_manager/model/area.dart';
 import 'package:room_manager/screen/area_list_screen.dart';
 import 'package:room_manager/screen/calendar_screen.dart';
@@ -7,6 +7,7 @@ import 'package:room_manager/screen/login_screen.dart';
 import 'package:room_manager/screen/room_list_screen.dart';
 import 'package:room_manager/service/area_service.dart';
 import 'package:room_manager/service/room_service.dart';
+import 'package:room_manager/utils.dart';
 import 'package:room_manager/widget/area_dialog.dart';
 import 'package:room_manager/widget/area_select_dialog.dart';
 import 'package:room_manager/widget/room_dialog.dart';
