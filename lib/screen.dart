@@ -13,7 +13,8 @@ import 'package:room_manager/widget/area_select_dialog.dart';
 import 'package:room_manager/widget/room_dialog.dart';
 
 class Screen extends StatefulWidget {
-  const Screen({ super.key });
+  final String username;
+  const Screen({ super.key, required this.username });
 
   @override
   State<Screen> createState() => _ScreenState();
@@ -37,13 +38,13 @@ class _ScreenState extends State<Screen> {
             padding: const EdgeInsets.only(right: 8.0),
             child:  GestureDetector(
               onTap: () {},
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child:  Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   children: [
-                    Text('Usuario'),
-                    SizedBox(width: 8),
-                    Icon(Icons.person),
+                    Text(widget.username),
+                    const SizedBox(width: 8),
+                    const Icon(Icons.person),
                   ],
                 ),
               ),
@@ -74,6 +75,7 @@ class _ScreenState extends State<Screen> {
                 label: Text('Salas')
               ),
               NavigationRailDestination(
+                disabled: true,
                 icon: Icon(Icons.settings),
                 label: Text('Ajustes'),
               ),

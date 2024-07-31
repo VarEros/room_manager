@@ -10,17 +10,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  String username = '';
   
   Future<String?> _authUser(LoginData data) {
     print('Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(const Duration(milliseconds: 3000), () {
-      return null;
-    });
-  }
-
-  Future<String?> _signupUser(SignupData data) {
-    print('Name: ${data.name}, Password: ${data.password}');
-    return Future.delayed(const Duration(milliseconds: 3000), () {
+      username = data.name;
       return null;
     });
   }
@@ -40,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
       onSignup: null,
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => const Screen(),
+          builder: (context) => Screen(username: username),
         ));
       },
       userValidator: defaultEmailValidator,
