@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:room_manager/model/room.dart';
 import 'package:room_manager/service/room_service.dart';
 import 'package:room_manager/utils.dart';
-import 'package:room_manager/widget/room_dialog.dart';
+import 'package:room_manager/dialog/room_dialog.dart';
 
 class RoomElemWidget extends StatelessWidget {
   final Room room;

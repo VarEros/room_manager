@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:room_manager/model/area.dart';
 import 'package:room_manager/service/area_service.dart';
 import 'package:room_manager/utils.dart';
-import 'package:room_manager/widget/area_dialog.dart';
+import 'package:room_manager/dialog/area_dialog.dart';
 
 class AreaElemWidget extends StatelessWidget {
   final Area area;

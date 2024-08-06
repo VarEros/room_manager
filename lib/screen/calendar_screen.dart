@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:room_manager/service/event_service.dart';
 import 'package:room_manager/service/room_service.dart';
 import 'package:room_manager/utils.dart';
-import 'package:room_manager/widget/event_dialog.dart';
+import 'package:room_manager/dialog/event_dialog.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -69,6 +69,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
           },
           allowAppointmentResize: true,
           allowDragAndDrop: true,
+          onDragUpdate: (AppointmentDragUpdateDetails details) {
+          },
           onDragEnd: (AppointmentDragEndDetails details) => isChangesNotifier.value = true,
           onAppointmentResizeEnd: (appointmentResizeEndDetails) => isChangesNotifier.value = true,
           timeSlotViewSettings: const TimeSlotViewSettings(

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:room_manager/dialog/docent_dialog.dart';
 // import 'package:room_manager/Utils.dart';
 import 'package:room_manager/model/area.dart';
 import 'package:room_manager/screen/area_list_screen.dart';
 import 'package:room_manager/screen/calendar_screen.dart';
+import 'package:room_manager/screen/docent_list_screen.dart';
 import 'package:room_manager/screen/login_screen.dart';
 import 'package:room_manager/screen/room_list_screen.dart';
 import 'package:room_manager/service/area_service.dart';
+import 'package:room_manager/service/docent_service.dart';
 import 'package:room_manager/service/room_service.dart';
 import 'package:room_manager/utils.dart';
-import 'package:room_manager/widget/area_dialog.dart';
+import 'package:room_manager/dialog/area_dialog.dart';
 import 'package:room_manager/widget/area_select_dialog.dart';
-import 'package:room_manager/widget/room_dialog.dart';
+import 'package:room_manager/dialog/room_dialog.dart';
 
 class Screen extends StatefulWidget {
   final String username;
@@ -75,6 +79,10 @@ class _ScreenState extends State<Screen> {
                 label: Text('Salas')
               ),
               NavigationRailDestination(
+                icon: Icon(Icons.people), 
+                label: Text('Docentes')
+              ),
+              NavigationRailDestination(
                 disabled: true,
                 icon: Icon(Icons.settings),
                 label: Text('Ajustes'),
@@ -110,7 +118,8 @@ class _ScreenState extends State<Screen> {
                   ],
                 ),
               const AreaListScreen(),
-              const RoomListScreen()
+              const RoomListScreen(),
+              const DocentListScreen()
             ][selectedIndex],
           ),
         ],
@@ -151,6 +160,24 @@ class _ScreenState extends State<Screen> {
             ).then((value) {
               if (value != null) {
                 RoomService().saveRoom(value).then((_) {
+                  utils.showSuccessNotification(context, 'Create');
+                });
+              }
+            });
+          },
+          child: const Icon(Icons.add),
+        ),
+        3 => FloatingActionButton(
+          tooltip: 'Agregar Docente',
+          onPressed: () {
+            showDialog(
+              context: context, 
+              builder: (BuildContext context) {
+                return DocentDialog(docent: DocentService().emptyDocent());
+              }
+            ).then((value) {
+              if (value != null) {
+                DocentService().saveDocent(value).then((_) {
                   utils.showSuccessNotification(context, 'Create');
                 });
               }

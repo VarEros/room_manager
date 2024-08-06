@@ -1,12 +1,14 @@
 import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:room_manager/model/docent.dart';
 import 'package:room_manager/model/room.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class EventDialog extends StatefulWidget {
   final DateTime selectedDate;
   final List<Room> rooms;
-  const EventDialog({ super.key, required this.selectedDate, required this.rooms });
+  final List<Docent> docents;
+  const EventDialog({ super.key, required this.selectedDate, required this.rooms, required this.docents});
 
   @override
   State<EventDialog> createState() => _EventDialogState();
@@ -48,6 +50,20 @@ class _EventDialogState extends State<EventDialog> {
             }).toList(),
             onChanged: (int? newValue) {
               setState(() => selectedRoom = newValue!);
+            },
+          ),
+          const SizedBox(height: 10),
+          DropdownButton<int>(
+            isExpanded: true,
+            value: null,
+            items: widget.docents.map((docent) {
+              return DropdownMenuItem(
+                value: docent.id,
+                child: Text(docent.name),
+              );
+            }).toList(),
+            onChanged: (int? newValue) {
+              // setState(() => selectedRoom = newValue!);
             },
           ),
           DurationPicker(

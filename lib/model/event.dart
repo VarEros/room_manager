@@ -5,6 +5,7 @@ class Event {
   String title;
   DateTime startDate;
   DateTime finishDate;
+  int idDocent;
   Room room;
 
   Event({
@@ -12,6 +13,7 @@ class Event {
     required this.title,
     required this.startDate,
     required this.finishDate,
+    required this.idDocent,
     required this.room
   });
 }
