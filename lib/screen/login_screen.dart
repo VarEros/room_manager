@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:room_manager/model/area.dart';
+import 'package:room_manager/model/user.dart';
 import 'package:room_manager/screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -10,13 +12,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
-  String username = '';
+  late User user;
   
   Future<String?> _authUser(LoginData data) {
     print('Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(const Duration(milliseconds: 3000), () {
-      username = data.name;
+      user = User(email: data.name, area: Area(id: 1, name: 'Sistemas'));
       return null;
     });
   }
@@ -36,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       onSignup: null,
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => Screen(username: username),
+          builder: (context) => Screen(user: user),
         ));
       },
       userValidator: defaultEmailValidator,

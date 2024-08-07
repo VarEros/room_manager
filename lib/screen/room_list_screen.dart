@@ -3,7 +3,8 @@ import 'package:room_manager/service/room_service.dart';
 import 'package:room_manager/widget/room_elem_widget.dart';
 
 class RoomListScreen extends StatefulWidget {
-  const RoomListScreen({ super.key });
+  final int? areaId;
+  const RoomListScreen({ super.key, this.areaId });
 
   @override
   State<RoomListScreen> createState() => _RoomListScreenState();
@@ -15,9 +16,15 @@ class _RoomListScreenState extends State<RoomListScreen> {
 
   @override
   void initState() {
-    roomService.getRooms().then((value) {
-      if (mounted) setState(() => isLoading = false);
-    });
+    if (widget.areaId == null) {
+      roomService.getRooms().then((value) {
+        if (mounted) setState(() => isLoading = false);
+      });
+    } else {
+      roomService.getRoomsByArea(widget.areaId!).then((value) {
+        if (mounted) setState(() => isLoading = false);
+      });
+    }
     super.initState();
   }
 

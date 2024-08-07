@@ -19,11 +19,13 @@ class _EventDialogState extends State<EventDialog> {
   final TextEditingController eventController = TextEditingController();
   Duration _duration = const Duration(hours: 1);
   late int selectedRoom;
+  late int selectedDocent;
   late Appointment newAppointment;
 
   @override
   void initState() {
     selectedRoom = widget.rooms.first.id;
+    selectedDocent = widget.docents.first.id;
     super.initState();
   }
 
@@ -55,7 +57,7 @@ class _EventDialogState extends State<EventDialog> {
           const SizedBox(height: 10),
           DropdownButton<int>(
             isExpanded: true,
-            value: null,
+            value: selectedDocent,
             items: widget.docents.map((docent) {
               return DropdownMenuItem(
                 value: docent.id,
@@ -63,7 +65,7 @@ class _EventDialogState extends State<EventDialog> {
               );
             }).toList(),
             onChanged: (int? newValue) {
-              // setState(() => selectedRoom = newValue!);
+              setState(() => selectedRoom = newValue!);
             },
           ),
           DurationPicker(

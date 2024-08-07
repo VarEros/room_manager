@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:room_manager/service/docent_service.dart';
 import 'package:room_manager/service/event_service.dart';
 import 'package:room_manager/service/room_service.dart';
 import 'package:room_manager/utils.dart';
@@ -16,15 +17,18 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   EventService eventService = EventService();
   RoomService roomService = RoomService();
+  DocentService docentService = DocentService();
   bool isLoading = true;
   final ValueNotifier<bool> isChangesNotifier = ValueNotifier<bool>(false);
 
   loadData() {
     isLoading = true;
     roomService.getRoomsByArea(widget.areaId).then((value) {
-      eventService.getEventsByAreaId(widget.areaId).then((value) {
-        eventService.getAppointments();
-        setState(() => isLoading = false);
+      docentService.getDocents().then((value) {
+        eventService.getEventsByAreaId(widget.areaId).then((value) {
+          eventService.getAppointments();
+          setState(() => isLoading = false);
+        });
       });
     });
   }
@@ -111,7 +115,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return EventDialog(selectedDate: selectedDate, rooms: roomService.rooms);
+        return EventDialog(selectedDate: selectedDate, rooms: roomService.rooms, docents: docentService.docents);
       },
     ).then((value) {
       if (value != null) {

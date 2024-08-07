@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:room_manager/model/area.dart';
+import 'package:room_manager/model/user.dart';
 import 'package:room_manager/screen.dart';
 import 'package:room_manager/screen/login_screen.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
@@ -45,7 +47,7 @@ class _MainAppState extends State<MainApp> {
       ),
       theme: _theme,
       debugShowCheckedModeBanner: false,
-      home: const Screen(username: 'packito')
+      home: Screen(user: User(email: 'fds', area: Area(id: 1, name: 'Sistemas'))),
     );
   }
 }

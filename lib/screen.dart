@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:room_manager/dialog/docent_dialog.dart';
 // import 'package:room_manager/Utils.dart';
 import 'package:room_manager/model/area.dart';
+import 'package:room_manager/model/user.dart';
 import 'package:room_manager/screen/area_list_screen.dart';
 import 'package:room_manager/screen/calendar_screen.dart';
 import 'package:room_manager/screen/docent_list_screen.dart';
@@ -17,8 +18,8 @@ import 'package:room_manager/widget/area_select_dialog.dart';
 import 'package:room_manager/dialog/room_dialog.dart';
 
 class Screen extends StatefulWidget {
-  final String username;
-  const Screen({ super.key, required this.username });
+  final User user;
+  const Screen({ super.key, required this.user });
 
   @override
   State<Screen> createState() => _ScreenState();
@@ -27,7 +28,17 @@ class Screen extends StatefulWidget {
 class _ScreenState extends State<Screen> {
   int selectedIndex = 0;
   Area ?selectedArea;
+  bool isAdmin = true;
   Utils utils = Utils();
+
+  @override
+  void initState() {
+    if (widget.user.area != null) {
+      selectedArea = widget.user.area;
+      isAdmin = false;
+    }
+    super.initState();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -46,7 +57,7 @@ class _ScreenState extends State<Screen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   children: [
-                    Text(widget.username),
+                    Text(widget.user.email),
                     const SizedBox(width: 8),
                     const Icon(Icons.person),
                   ],
@@ -64,25 +75,25 @@ class _ScreenState extends State<Screen> {
                 selectedIndex = index;
               });
             },
-            destinations: const <NavigationRailDestination>[
-              NavigationRailDestination(
+            destinations: <NavigationRailDestination>[
+              const NavigationRailDestination(
                 icon: Icon(Icons.date_range),
-                selectedIcon: Icon(Icons.date_range),
                 label: Text('Calendario'),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.meeting_room),
-                label: Text('Areas'),
+                disabled: !isAdmin,
+                icon: const Icon(Icons.meeting_room),
+                label: const Text('Areas'),
               ),
-              NavigationRailDestination(
+              const NavigationRailDestination(
                 icon: Icon(Icons.room_service), 
                 label: Text('Salas')
               ),
-              NavigationRailDestination(
+              const NavigationRailDestination(
                 icon: Icon(Icons.people), 
                 label: Text('Docentes')
               ),
-              NavigationRailDestination(
+              const NavigationRailDestination(
                 disabled: true,
                 icon: Icon(Icons.settings),
                 label: Text('Ajustes'),
@@ -118,7 +129,7 @@ class _ScreenState extends State<Screen> {
                   ],
                 ),
               const AreaListScreen(),
-              const RoomListScreen(),
+              RoomListScreen(areaId: isAdmin ? null : selectedArea!.id),
               const DocentListScreen()
             ][selectedIndex],
           ),
@@ -126,7 +137,7 @@ class _ScreenState extends State<Screen> {
       ),
       floatingActionButton: 
       switch (selectedIndex) {
-        0 =>  selectedArea != null ? FloatingActionButton.extended(
+        0 =>  selectedArea != null && isAdmin ? FloatingActionButton.extended(
           onPressed: () => showAreaSelectDialog(),
           label: const Text('Cambiar Area'),
           icon: const Icon(Icons.meeting_room),
