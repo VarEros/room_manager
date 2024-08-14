@@ -47,7 +47,7 @@ class _MainAppState extends State<MainApp> {
       ),
       theme: _theme,
       debugShowCheckedModeBanner: false,
-      home: Screen(user: User(email: 'fds', area: Area(id: 1, name: 'Sistemas'))),
+      home: Screen(user: User(email: 'fds')),
     );
   }
 }

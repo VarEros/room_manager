@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:room_manager/controllers/docent.controller.dart';
 import 'package:room_manager/model/docent.dart';
 
 class DocentService {
@@ -7,19 +10,13 @@ class DocentService {
     return Docent(id: 0, name: '');
   }
 
-  Future getDocents() {
-    return Future.delayed(const Duration(seconds: 1), () {
-      docents = [
-        Docent(id: 1, name: 'Docente 1'),
-        Docent(id: 2, name: 'Docente 2'),
-        Docent(id: 3, name: 'Docente 3'),
-      ];
-    });
+  Future<List<Docent>> getDocents() async{
+    final roomData = await DocentController().getRooms();
+    docents = roomData.data;
+    return docents;
   }
 
-  Future saveDocent(Docent docent) {
-    return Future.delayed(const Duration(seconds: 1), () {
-      print('Docente guardado');
-    });
+  Future<void> saveDocent(Docent docent) async {
+    DocentController().saveDocent(json.encode(docent.toJson()));
   }
 }
