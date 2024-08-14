@@ -8,4 +8,5 @@ class Area {
     required this.name,
     this.description = ''
   });
+  
 }

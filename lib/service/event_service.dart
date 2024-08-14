@@ -7,6 +7,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 class EventService {
   List<Event> events = [];
   List<Appointment> appointments = [];
+  List<Appointment> changesAppointments = [];
 
   Future getEvents() async {
     return Future.delayed(const Duration(seconds: 1), () {
@@ -42,6 +43,7 @@ class EventService {
 
   getAppointments() {
     appointments = events.map((event) => Appointment(
+      id: event.id,
       startTime: event.startDate,
       endTime: event.finishDate,
       subject: event.title,

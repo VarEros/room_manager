@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:room_manager/dialog/docent_dialog.dart';
-// import 'package:room_manager/Utils.dart';
 import 'package:room_manager/model/area.dart';
 import 'package:room_manager/model/user.dart';
 import 'package:room_manager/screen/area_list_screen.dart';
@@ -9,13 +6,8 @@ import 'package:room_manager/screen/calendar_screen.dart';
 import 'package:room_manager/screen/docent_list_screen.dart';
 import 'package:room_manager/screen/login_screen.dart';
 import 'package:room_manager/screen/room_list_screen.dart';
-import 'package:room_manager/service/area_service.dart';
-import 'package:room_manager/service/docent_service.dart';
-import 'package:room_manager/service/room_service.dart';
 import 'package:room_manager/utils.dart';
-import 'package:room_manager/dialog/area_dialog.dart';
 import 'package:room_manager/widget/area_select_dialog.dart';
-import 'package:room_manager/dialog/room_dialog.dart';
 
 class Screen extends StatefulWidget {
   final User user;
@@ -135,69 +127,11 @@ class _ScreenState extends State<Screen> {
           ),
         ],
       ),
-      floatingActionButton: 
-      switch (selectedIndex) {
-        0 =>  selectedArea != null && isAdmin ? FloatingActionButton.extended(
+      floatingActionButton: selectedIndex == 0 && selectedArea != null && isAdmin ? FloatingActionButton.extended(
           onPressed: () => showAreaSelectDialog(),
           label: const Text('Cambiar Area'),
           icon: const Icon(Icons.meeting_room),
         ) : null,
-        1 => FloatingActionButton(
-          tooltip: 'Agregar Area',
-          onPressed: () {
-            showDialog(
-              context: context, 
-              builder: (BuildContext context) {
-                return AreaDialog(area: AreaService().emptyArea());
-              }
-            ).then((value) {
-              if (value != null) {
-                AreaService().saveArea(value).then((_) {
-                  utils.showSuccessNotification(context, 'Create');
-                });
-              }
-            });
-          },
-          child: const Icon(Icons.add),
-        ),
-        2 => FloatingActionButton(
-          tooltip: 'Agregar Sala',
-          onPressed: () {
-            showDialog(
-              context: context, 
-              builder: (BuildContext context) {
-                return RoomDialog(room: RoomService().emptyRoom());
-              }
-            ).then((value) {
-              if (value != null) {
-                RoomService().saveRoom(value).then((_) {
-                  utils.showSuccessNotification(context, 'Create');
-                });
-              }
-            });
-          },
-          child: const Icon(Icons.add),
-        ),
-        3 => FloatingActionButton(
-          tooltip: 'Agregar Docente',
-          onPressed: () {
-            showDialog(
-              context: context, 
-              builder: (BuildContext context) {
-                return DocentDialog(docent: DocentService().emptyDocent());
-              }
-            ).then((value) {
-              if (value != null) {
-                DocentService().saveDocent(value).then((_) {
-                  utils.showSuccessNotification(context, 'Create');
-                });
-              }
-            });
-          },
-          child: const Icon(Icons.add),
-        ),
-        _ => null,
-      }
     );
   }
 
