@@ -22,7 +22,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
   final ValueNotifier<bool> isChangesNotifier = ValueNotifier<bool>(false);
 
   loadData() {
-    isLoading = true;
+    setState(() => isLoading = true);
+    eventService.changesEvents.clear();
     roomService.getRoomsByArea(widget.areaId).then((value) {
       docentService.getDocents().then((value) {
         eventService.getEventsByAreaId(widget.areaId).then((value) {
@@ -68,8 +69,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
             if (details.targetElement == CalendarElement.calendarCell) {
               _showAddEventDialog(details.date!);
             } else if (details.targetElement == CalendarElement.appointment) {
-              _showRemoveEventDialog(details.appointments!.first);
-            }
+              _showEditEventDialog((details.appointments!.first as Appointment).id as int);
+            } 
           },
           allowAppointmentResize: true,
           allowDragAndDrop: true,
@@ -104,8 +105,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   void _saveChanges() {
     eventService.saveEvents().then((value) {
+      print(eventService.changesEvents);
       Utils().showSuccessNotification(context, 'Update');
       isChangesNotifier.value = false;
+      loadData();
     });
   }
 
@@ -113,12 +116,33 @@ class _CalendarScreenState extends State<CalendarScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return EventDialog(selectedDate: selectedDate, rooms: roomService.rooms, docents: docentService.docents);
+        return EventDialog(event: eventService.emptyEvent(selectedDate), rooms: roomService.rooms, docents: docentService.docents);
       },
     ).then((value) {
       if (value != null) {
         setState(() { 
-          eventService.appointments.add(value);
+          value.id = eventService.events.length + eventService.changesEvents.length + 1;
+          eventService.addChangeEvent(value);
+          eventService.appointments.add(eventService.getAppointmentFromEvent(value));
+          isChangesNotifier.value = true;
+        });
+      }
+    });
+  }
+
+  void _showEditEventDialog(int idAppointment) {
+    final event = eventService.changesEvents.firstWhere((event) => event.id == idAppointment, orElse: () => eventService.events.firstWhere((event) => event.id == idAppointment));
+    
+    showDialog(
+      context: context,
+      builder: (context) {
+        return EventDialog(event: event, rooms: roomService.rooms, docents: docentService.docents);
+      },
+    ).then((value) {
+      if (value != null) {
+        setState(() {
+          eventService.addChangeEvent(value);
+          eventService.replaceAppointment(eventService.getAppointmentFromEvent(value));
           isChangesNotifier.value = true;
         });
       }
@@ -142,7 +166,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
   
   void _handleAppointmentChanges(Appointment appointment) {
-    eventService.changesAppointments.add(appointment);
+    eventService.addChangeEventForAppointment(appointment);
     isChangesNotifier.value = true;
   }
 }
