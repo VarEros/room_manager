@@ -6,7 +6,8 @@ import 'package:room_manager/dialog/room_dialog.dart';
 
 class RoomElemWidget extends StatelessWidget {
   final Room room;
-  const RoomElemWidget({ super.key, required this.room});
+  final VoidCallback onTap;
+  const RoomElemWidget({ super.key, required this.room, required this.onTap});
 
   @override
   Widget build(BuildContext context){
@@ -27,9 +28,10 @@ class RoomElemWidget extends StatelessWidget {
           builder: (context) => RoomDialog(room: room)
         ).then((value) {
           if (value != null) {
-            RoomService().saveRoom(value).then((_) =>
-              utils.showSuccessNotification(context, 'Update')
-            );
+            RoomService().saveRoom(value).then((_) {
+              utils.showSuccessNotification(context, 'Update');
+              onTap();
+            });
           }
         });
       },

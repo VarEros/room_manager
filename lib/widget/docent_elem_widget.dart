@@ -6,8 +6,8 @@ import 'package:room_manager/utils.dart';
 
 class DocentElemWidget extends StatelessWidget {
   final Docent docent;
-  final DocentService docentService;
-  const DocentElemWidget({ super.key, required this.docent, required this.docentService});
+  final VoidCallback onTap;
+  const DocentElemWidget({ super.key, required this.docent, required this.onTap});
 
   @override
   Widget build(BuildContext context){
@@ -21,7 +21,10 @@ class DocentElemWidget extends StatelessWidget {
           builder: (context) => DocentDialog(docent: docent)
         ).then((value) {
           if (value != null) {
-            docentService.saveDocent(docent).then((value) => utils.showSuccessNotification(context, 'Update'));
+            DocentService().saveDocent(docent).then((value) {
+              utils.showSuccessNotification(context, 'Update');
+              onTap();
+            });
           }
         });
       },

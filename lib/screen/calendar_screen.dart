@@ -27,7 +27,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       docentService.getDocents().then((value) {
         eventService.getEventsByAreaId(widget.areaId).then((value) {
           eventService.getAppointments();
-          setState(() => isLoading = false);
+          if (mounted) setState(() => isLoading = false);
         });
       });
     });
@@ -73,10 +73,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
           },
           allowAppointmentResize: true,
           allowDragAndDrop: true,
-          onDragUpdate: (AppointmentDragUpdateDetails details) {
-          },
-          onDragEnd: (AppointmentDragEndDetails details) => isChangesNotifier.value = true,
-          onAppointmentResizeEnd: (appointmentResizeEndDetails) => isChangesNotifier.value = true,
+          onDragEnd: (AppointmentDragEndDetails details) => _handleAppointmentChanges(details.appointment as Appointment),
+          onAppointmentResizeEnd: (AppointmentResizeEndDetails details ) => _handleAppointmentChanges(details.appointment as Appointment),
           timeSlotViewSettings: const TimeSlotViewSettings(
             startHour: 9,
             endHour: 20,
@@ -141,6 +139,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
         });
       }
     });
+  }
+  
+  void _handleAppointmentChanges(Appointment appointment) {
+    eventService.changesAppointments.add(appointment);
+    isChangesNotifier.value = true;
   }
 }
 

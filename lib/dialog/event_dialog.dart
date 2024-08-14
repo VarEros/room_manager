@@ -65,7 +65,7 @@ class _EventDialogState extends State<EventDialog> {
               );
             }).toList(),
             onChanged: (int? newValue) {
-              setState(() => selectedRoom = newValue!);
+              setState(() => selectedDocent = newValue!);
             },
           ),
           DurationPicker(
@@ -89,7 +89,8 @@ class _EventDialogState extends State<EventDialog> {
             final String eventTitle = eventController.text;
             if (eventTitle.isNotEmpty) {
               newAppointment = Appointment(
-                subject: eventTitle,
+                resourceIds: <Object>[selectedDocent, selectedRoom],
+                subject: '$eventTitle - ${widget.docents.firstWhere((docent) => docent.id == selectedDocent).name}',
                 startTime: widget.selectedDate,
                 endTime:  widget.selectedDate.add(_duration),
                 color: Colors.green,

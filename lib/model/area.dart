@@ -9,7 +9,8 @@ class Area {
     required this.id, 
     required this.name,
     this.description = ''
-  });
+  });  
+}
 
   Map<String, dynamic> toJson() => {
     "name": name,
