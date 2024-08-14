@@ -24,6 +24,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   loadData() {
     setState(() => isLoading = true);
     eventService.changesEvents.clear();
+    print(widget.areaId);
     roomService.getRoomsByArea(widget.areaId).then((value) {
       docentService.getDocents().then((value) {
         eventService.getEventsByAreaId(widget.areaId).then((value) {

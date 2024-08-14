@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:room_manager/controllers/event.controller.dart';
 import 'package:room_manager/model/area.dart';
 import 'package:room_manager/model/docent.dart';
 import 'package:room_manager/model/event.dart';
@@ -18,28 +21,25 @@ class EventService {
     });
   }
 
-  Future getEventsByAreaId(int areaId) async {
-    return Future.delayed(const Duration(seconds: 1), () {
-      if (areaId == 1) {
-        events = [
-          Event(id: 1, title: 'Event 1', startDate: DateTime.now().subtract(const Duration(hours: 10)), finishDate: DateTime.now().subtract(const Duration(hours: 8)), docent: Docent(id: 1, name: 'Docente 1'), room: Room(id: 1, name: 'Room 1', description: 'Room 1 description', capacity: 10, color: Colors.blue.value, area: Area(id: 1, name: 'Area 1'))),
-        ];
-      } else if (areaId == 2) {
-        events = [
-          Event(id: 2, title: 'Event 2', startDate: DateTime.now(), finishDate: DateTime.now().add(const Duration(hours: 2)), docent: Docent(id: 1, name: 'Docente 1'), room: Room(id: 2, name: 'Room 2', description: 'Room 2 description', capacity: 10, color: Colors.blue.value, area: Area(id: 2, name: 'Area 2'))),
-          Event(id: 3, title: 'Event 3', startDate: DateTime.now(), finishDate: DateTime.now().add(const Duration(hours: 2)), docent: Docent(id: 1, name: 'Docente 1'), room: Room(id: 3, name: 'Room 3', description: 'Room 3 description', capacity: 10, color: Colors.blue.value, area: Area(id: 2, name: 'Area 2'))),
-        ];
-      } else {
-        events = [];
-      }
-
-    });
+  Future<List<Event>> getEventsByAreaId(int areaId) async {
+    final eventData = await EventController().getRoomsById(areaId);
+    events = eventData.data;
+    return events;
   }
 
   Future saveEvents() async {
-    return Future.delayed(const Duration(seconds: 1), () {
-      return true;
+    final lastId = events.last.id;
+
+    changesEvents.forEach((Event event) => {
+      if (event.id > lastId) 
+        event.id = 0 
     });
+
+     List<Map<String, dynamic>> jsonEvents = changesEvents.map((event) => event.toJson()).toList();
+
+     String jsonBody = json.encode(jsonEvents);
+
+     await EventController().saveEvent(jsonBody);
   }
 
   getAppointments() {

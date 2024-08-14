@@ -6,5 +6,7 @@ class Constants {
 
   static const String GET_CREATE_DOCENT  = 'http://localhost:3000/api/docent';
 
+  static const String GET_CREATE_EVENT = 'http://localhost:3000/api/event';
+
 }
 
