@@ -1,16 +1,14 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:room_manager/constants/http.constant.dart';
 import 'package:room_manager/model/area.dart';
-import 'package:room_manager/constants/http.constant.dart';
 
 class AreaController{
  
  Future<http.Response> saveArea(dynamic json) async {
   try {
     final response = await http.post(
-      Uri.parse(Constants.CREATE_AREA),
+      Uri.parse(Constants.GET_CREATE_AREAS),
       headers: {"Content-Type": "application/json"},
       body: json,
     );
@@ -26,11 +24,10 @@ class AreaController{
  }
 
 
-
   Future<List<Area>> getAreas() async {
     try {
       final response = await http.get(
-        Uri.parse(Constants.GET_AREAS),
+        Uri.parse(Constants.GET_CREATE_AREAS),
         headers: {"Content-Type": "application/json"}
       );
 

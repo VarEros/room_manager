@@ -1,6 +1,5 @@
 import 'package:room_manager/controllers/area.controller.dart';
 import 'package:room_manager/model/area.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AreaService {
@@ -12,7 +11,7 @@ class AreaService {
 
   emptyArea() => Area(id: 0, name: '', description: '');
 
-  Future saveArea(Area area) async {
+  Future<void> saveArea(Area area) async {
     AreaController().saveArea(json.encode(area.toJson()));
   }
 }
