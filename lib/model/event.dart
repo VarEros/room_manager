@@ -16,4 +16,6 @@ class Event {
     required this.idDocent,
     required this.room
   });
+
+  
 }

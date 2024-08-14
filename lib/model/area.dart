@@ -11,7 +11,7 @@ class Area {
     this.description = ''
   });  
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
     "name": name,
     "description": description,
   };
