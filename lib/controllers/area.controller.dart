@@ -24,6 +24,25 @@ class AreaController{
  }
 
 
+   Future<http.Response> updateArea(int id, dynamic json) async {
+  try {
+    final response = await http.put(
+      Uri.parse('${Constants.GET_CREATE_AREAS}/$id'),
+      headers: {"Content-Type": "application/json"},
+      body: json,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response;
+    } else {
+      throw Exception('No se pudo guardar el area. Status code: ${response.statusCode}');
+    }
+  } catch (error) {
+    throw Exception('Error intentando guardar el area: $error');
+  }
+ }
+
+
   Future<List<Area>> getAreas() async {
     try {
       final response = await http.get(

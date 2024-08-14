@@ -13,14 +13,6 @@ class EventService {
   List<Appointment> appointments = [];
   List<Event> changesEvents = [];
 
-  Future getEvents() async {
-    return Future.delayed(const Duration(seconds: 1), () {
-      events = [
-        Event(id: 1, title: 'Event 1', startDate: DateTime.now(), finishDate: DateTime.now().add(const Duration(hours: 2)), docent: Docent(id: 1, name: 'Docente 1'), room: Room(id: 1, name: 'Room 1', description: 'Room 1 description', capacity: 10, color: Color.getAlphaFromOpacity(10), area: Area(id: 1, name: 'Area 1'))),
-      ];
-    });
-  }
-
   Future<List<Event>> getEventsByAreaId(int areaId) async {
     final eventData = await EventController().getRoomsById(areaId);
     events = eventData.data;

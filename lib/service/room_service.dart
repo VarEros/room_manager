@@ -25,6 +25,13 @@ Future<List<Room>> getRooms() async {
 
   //save room
   Future<void> saveRoom(Room room) async {
-    RoomController().saveRoom(json.encode(room.toJson()));
+    if (room.id == 0){
+      RoomController().saveRoom(json.encode(room.toJson()));
+    }
+    else{
+      RoomController().updateRoom(room.id, json.encode(room.toJson()));
+    }
   }
+
+
 }

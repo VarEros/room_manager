@@ -12,6 +12,14 @@ class AreaService {
   emptyArea() => Area(id: 0, name: '', description: '');
 
   Future<void> saveArea(Area area) async {
-    AreaController().saveArea(json.encode(area.toJson()));
+        if (area.id == 0){
+            AreaController().saveArea(json.encode(area.toJson()));
+
+        }
+    else{
+
+    AreaController().updateArea(area.id, json.encode(area.toJson()));
+    }
+
   }
 }
