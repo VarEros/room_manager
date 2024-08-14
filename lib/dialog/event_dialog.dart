@@ -1,14 +1,14 @@
 import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:room_manager/model/docent.dart';
+import 'package:room_manager/model/event.dart';
 import 'package:room_manager/model/room.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class EventDialog extends StatefulWidget {
-  final DateTime selectedDate;
+  final Event event;
   final List<Room> rooms;
   final List<Docent> docents;
-  const EventDialog({ super.key, required this.selectedDate, required this.rooms, required this.docents});
+  const EventDialog({ super.key, required this.event, required this.rooms, required this.docents});
 
   @override
   State<EventDialog> createState() => _EventDialogState();
@@ -17,15 +17,24 @@ class EventDialog extends StatefulWidget {
 class _EventDialogState extends State<EventDialog> {
   
   final TextEditingController eventController = TextEditingController();
-  Duration _duration = const Duration(hours: 1);
-  late int selectedRoom;
-  late int selectedDocent;
-  late Appointment newAppointment;
+  late Duration _duration;
+  late Event newEvent;
+  late bool isNew;
+  late int idDocent;
+  late int idRoom;
 
   @override
   void initState() {
-    selectedRoom = widget.rooms.first.id;
-    selectedDocent = widget.docents.first.id;
+    eventController.text = widget.event.title;
+    _duration = widget.event.finishDate.difference(widget.event.startDate);
+    isNew = widget.event.id == 0;
+    if (!isNew) {
+      idDocent = widget.event.docent.id;
+      idRoom = widget.event.room.id;
+    } else {
+      idDocent = widget.docents.first.id;
+      idRoom = widget.rooms.first.id;
+    }
     super.initState();
   }
 
@@ -43,7 +52,7 @@ class _EventDialogState extends State<EventDialog> {
           const SizedBox(height: 10),
           DropdownButton<int>(
             isExpanded: true,
-            value: selectedRoom,
+            value: idRoom,
             items: widget.rooms.map((room) {
               return DropdownMenuItem<int>(
                 value: room.id,
@@ -51,13 +60,13 @@ class _EventDialogState extends State<EventDialog> {
               );
             }).toList(),
             onChanged: (int? newValue) {
-              setState(() => selectedRoom = newValue!);
+              setState(() => idRoom = newValue!);
             },
           ),
           const SizedBox(height: 10),
           DropdownButton<int>(
             isExpanded: true,
-            value: selectedDocent,
+            value: idDocent,
             items: widget.docents.map((docent) {
               return DropdownMenuItem(
                 value: docent.id,
@@ -65,7 +74,7 @@ class _EventDialogState extends State<EventDialog> {
               );
             }).toList(),
             onChanged: (int? newValue) {
-              setState(() => selectedDocent = newValue!);
+              setState(() => idDocent = newValue!);
             },
           ),
           DurationPicker(
@@ -88,15 +97,16 @@ class _EventDialogState extends State<EventDialog> {
             if (eventController.text.isEmpty) return;
             final String eventTitle = eventController.text;
             if (eventTitle.isNotEmpty) {
-              newAppointment = Appointment(
-                resourceIds: <Object>[selectedDocent, selectedRoom],
-                subject: '$eventTitle - ${widget.docents.firstWhere((docent) => docent.id == selectedDocent).name}',
-                startTime: widget.selectedDate,
-                endTime:  widget.selectedDate.add(_duration),
-                color: Colors.green,
+              newEvent = Event(
+                id: widget.event.id,
+                title: eventTitle,
+                startDate: widget.event.startDate,
+                finishDate: widget.event.startDate.add(_duration),
+                docent: widget.docents.firstWhere((docent) => docent.id == idDocent),
+                room: widget.rooms.firstWhere((room) => room.id == idRoom),
               );
             }
-            Navigator.pop(context, newAppointment);
+            Navigator.pop(context, newEvent);
           },
           child: const Text('Guardar'),
         ),

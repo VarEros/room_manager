@@ -1,3 +1,4 @@
+import 'package:room_manager/model/docent.dart';
 import 'package:room_manager/model/room.dart';
 
 class Event {
@@ -5,7 +6,7 @@ class Event {
   String title;
   DateTime startDate;
   DateTime finishDate;
-  int idDocent;
+  Docent docent;
   Room room;
 
   Event({
@@ -13,7 +14,7 @@ class Event {
     required this.title,
     required this.startDate,
     required this.finishDate,
-    required this.idDocent,
+    required this.docent,
     required this.room
   });
 
