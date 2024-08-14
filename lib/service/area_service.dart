@@ -1,25 +1,18 @@
+import 'package:room_manager/controllers/area.controller.dart';
 import 'package:room_manager/model/area.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AreaService {
   List<Area> areas = [];
 
-  Future<void> getAreas() async {
-    return Future.delayed(const Duration(seconds: 1), () {
-      areas = [
-        Area(id: 1, name: 'Area 1', description: 'Area 1 description'),
-        Area(id: 2, name: 'Area 2', description: 'Area 2 description'),
-        Area(id: 3, name: 'Area 3', description: 'Area 3 description'),
-      ];
-    });
+  dynamic getAreas() async {
+    return areas = await AreaController().getAreas();
   }
 
   emptyArea() => Area(id: 0, name: '', description: '');
 
-  //save area
-  Future<void> saveArea(Area area) async {
-    return Future.delayed(const Duration(seconds: 1), () {
-      areas.add(area);
-    });
+  Future saveArea(Area area) async {
+    AreaController().saveArea(json.encode(area.toJson()));
   }
-
 }
