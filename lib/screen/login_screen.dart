@@ -17,7 +17,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<String?> _authUser(LoginData data) {
     print('Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(const Duration(milliseconds: 3000), () {
-      user = User(email: data.name, area: Area(id: 1, name: 'Sistemas'));
+      // user = User(email: data.name, area: Area(id: 1, name: 'Sistemas'));
+      user = User(email: 'robertoamador09@gmail.com');
+
+      user = User(email: 'allansilva14@gmail.com');
+
       return null;
     });
   }

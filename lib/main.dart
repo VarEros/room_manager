@@ -47,7 +47,9 @@ class _MainAppState extends State<MainApp> {
       ),
       theme: _theme,
       debugShowCheckedModeBanner: false,
-      home: Screen(user: User(email: 'fds')),
+      // home: Screen(user: User(email: 'fds')),
+      home: LoginScreen()
+
     );
   }
 }

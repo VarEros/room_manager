@@ -17,8 +17,13 @@ Future<List<Room>> getRooms() async {
 
   Future getRoomsByArea(int idArea) async {
     final roomData = await RoomController().getRoomsByAreaId(idArea);
+if (roomData.data.isEmpty) {
+    rooms = [];
+  } else {
     rooms = roomData.data;
-    return rooms;
+  }
+
+  return rooms;
   }
 
   emptyRoom() => Room(id: 0, name: '', description: '', capacity: 0, color: Colors.white.value, area: AreaService().emptyArea());

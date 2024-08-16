@@ -28,6 +28,26 @@ class EventController{
   }
 
 
+Future<http.Response> updateEvent(int id, dynamic json) async {
+  try {
+    final response = await http.put(
+      Uri.parse('${Constants.GET_CREATE_EVENT}/$id'),
+      headers: {"Content-Type": "application/json"},
+      body: json,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response;
+    } else {
+      throw Exception('No se pudo actualizar el evento. Status code: ${response.statusCode}');
+    }
+  } catch (error) {
+    throw Exception('Error intentando actualizar el evento: $error');
+  }
+}
+
+
+
     Future<EventResponse> getRoomsById(int id) async {
     try {
       final response = await http.get(
